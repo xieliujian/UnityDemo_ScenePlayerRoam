@@ -99,6 +99,18 @@ namespace PlayerRoam
             UnityEditor.SceneView.duringSceneGui -= OnSceneGui2;
         }
 
+        void OnDrawGizmos()
+        {
+            // Your gizmo drawing thing goes here if required...
+
+            // Ensure continuous Update calls.
+            if (!Application.isPlaying)
+            {
+                EditorApplication.QueuePlayerLoopUpdate();
+                SceneView.RepaintAll();
+            }
+        }
+
         void Update()
         {
             if (m_SceneView == null)
@@ -128,8 +140,6 @@ namespace PlayerRoam
                 m_Move.LateUpdate(deltaTime);
                 m_Camera.LateUpdate(deltaTime);
             }
-
-            Debug.Log("111");
         }
 
         void OnSceneGui2(SceneView sceneView)
@@ -179,8 +189,6 @@ namespace PlayerRoam
                             m_Move.SetMoveParam(m_CurrentInputVector.x, m_CurrentInputVector.y, isSpeedUp);
                             m_DirKeysDown.Add(keyCode);
                             evt.Use();
-
-                            Debug.Log("222");
                         }
                     }
                     break;
@@ -449,7 +457,7 @@ namespace PlayerRoam
 
             //var deltaVel = desiredVelocity - m_CurrentVelocity;
             //m_CurrentVelocity += Damper.Damp(deltaVel, m_VelocityDamping, dt);
-            m_CurrentVelocity = Vector3.Lerp(m_CurrentVelocity, desiredVelocity, 0.5f);
+            m_CurrentVelocity = Vector3.Lerp(m_CurrentVelocity, desiredVelocity, 0.2f);
 
             var deltaPos = m_CurrentVelocity * dt * (isUseSpeedUp ? playerSpeedUpMult : playerNormalMoveSpeed);
             transform.position += deltaPos;
@@ -458,7 +466,7 @@ namespace PlayerRoam
                 var qA = transform.rotation;
                 var qB = Quaternion.LookRotation((m_InputForward == ForwardMode.Player && Vector3.Dot(fwd, m_CurrentVelocity) < 0) ? -m_CurrentVelocity : m_CurrentVelocity);
                 //transform.rotation = Quaternion.Slerp(qA, qB, Damper.Damp(1, m_VelocityDamping, dt));
-                transform.rotation = Quaternion.Slerp(qA, qB, 0.5f);
+                transform.rotation = Quaternion.Slerp(qA, qB, 0.2f);
             }
         }
 
