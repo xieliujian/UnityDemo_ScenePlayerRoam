@@ -455,9 +455,8 @@ namespace PlayerRoam
             var dt = Time.deltaTime;
             var desiredVelocity = input * m_Speed;
 
-            //var deltaVel = desiredVelocity - m_CurrentVelocity;
-            //m_CurrentVelocity += Damper.Damp(deltaVel, m_VelocityDamping, dt);
-            m_CurrentVelocity = Vector3.Lerp(m_CurrentVelocity, desiredVelocity, 0.2f);
+            var deltaVel = desiredVelocity - m_CurrentVelocity;
+            m_CurrentVelocity += Damper.Damp(deltaVel, m_VelocityDamping, dt);
 
             var deltaPos = m_CurrentVelocity * dt * (isUseSpeedUp ? playerSpeedUpMult : playerNormalMoveSpeed);
             transform.position += deltaPos;
@@ -465,8 +464,7 @@ namespace PlayerRoam
             {
                 var qA = transform.rotation;
                 var qB = Quaternion.LookRotation((m_InputForward == ForwardMode.Player && Vector3.Dot(fwd, m_CurrentVelocity) < 0) ? -m_CurrentVelocity : m_CurrentVelocity);
-                //transform.rotation = Quaternion.Slerp(qA, qB, Damper.Damp(1, m_VelocityDamping, dt));
-                transform.rotation = Quaternion.Slerp(qA, qB, 0.2f);
+                transform.rotation = Quaternion.Slerp(qA, qB, Damper.Damp(1, m_VelocityDamping, dt));
             }
         }
 
