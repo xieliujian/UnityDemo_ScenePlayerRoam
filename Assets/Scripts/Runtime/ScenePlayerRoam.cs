@@ -76,7 +76,11 @@ namespace PlayerRoam
 
         void OnEnable()
         {
-            UnityEditor.SceneView.duringSceneGui += OnSceneGui2;
+            SceneView.duringSceneGui -= OnSceneGui;
+            SceneView.duringSceneGui += OnSceneGui;
+
+            EditorApplication.update -= OnEditorAppUpdate;
+            EditorApplication.update += OnEditorAppUpdate;
 
             m_Anim.Init(gameObject);
             m_Move.Init(gameObject);
@@ -91,25 +95,25 @@ namespace PlayerRoam
 
         void OnDestroy()
         {
-            UnityEditor.SceneView.duringSceneGui -= OnSceneGui2;
+            UnityEditor.SceneView.duringSceneGui -= OnSceneGui;
         }
 
         void OnDisable()
         {
-            UnityEditor.SceneView.duringSceneGui -= OnSceneGui2;
+            UnityEditor.SceneView.duringSceneGui -= OnSceneGui;
         }
 
-        void OnDrawGizmos()
-        {
-            // Your gizmo drawing thing goes here if required...
+        //void OnDrawGizmos()
+        //{
+        //    //// Your gizmo drawing thing goes here if required...
 
-            // Ensure continuous Update calls.
-            if (!Application.isPlaying)
-            {
-                EditorApplication.QueuePlayerLoopUpdate();
-                SceneView.RepaintAll();
-            }
-        }
+        //    //// Ensure continuous Update calls.
+        //    //if (!Application.isPlaying)
+        //    //{
+        //    //    EditorApplication.QueuePlayerLoopUpdate();
+        //    //    SceneView.RepaintAll();
+        //    //}
+        //}
 
         void Update()
         {
@@ -142,7 +146,13 @@ namespace PlayerRoam
             }
         }
 
-        void OnSceneGui2(SceneView sceneView)
+        void OnEditorAppUpdate()
+        {
+            EditorApplication.QueuePlayerLoopUpdate();
+            //SceneView.RepaintAll();
+        }
+
+        void OnSceneGui(SceneView sceneView)
         {
             bool isKeyDown = Event.current.type == EventType.KeyDown;
             bool isCtrl = Event.current.control;
