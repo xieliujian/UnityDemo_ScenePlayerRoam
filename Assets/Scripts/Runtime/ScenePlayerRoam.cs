@@ -103,18 +103,6 @@ namespace PlayerRoam
             UnityEditor.SceneView.duringSceneGui -= OnSceneGui;
         }
 
-        //void OnDrawGizmos()
-        //{
-        //    //// Your gizmo drawing thing goes here if required...
-
-        //    //// Ensure continuous Update calls.
-        //    //if (!Application.isPlaying)
-        //    //{
-        //    //    EditorApplication.QueuePlayerLoopUpdate();
-        //    //    SceneView.RepaintAll();
-        //    //}
-        //}
-
         void Update()
         {
             if (m_SceneView == null)
